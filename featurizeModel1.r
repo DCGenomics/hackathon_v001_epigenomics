@@ -85,8 +85,9 @@ write.tsv(geneData2, outputFile)
 
 modelRNA <- function(i, geneDataList){
     geneData = geneDataList[[i]]
+    metaData.id <- grep("id|gene|end|patient", colnames(geneData))
     rna.id <- which(colnames(geneData) == "RNA")
-    covari <- as.matrix(geneData[,-c(1:4, rna.id)])
+    covari <- as.matrix(geneData[,-c(metaData.id, rna.id)])
     rna <- as.matrix(geneData[,rna.id])
     rna <- log2(rna/sum(rna) + 0.5)
     # first local cpg model
