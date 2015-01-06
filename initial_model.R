@@ -1,6 +1,7 @@
 library(lars)
 library(GenomicRanges)
 library(preprocessCore)
+library(bsseq)
 
 # competing models :
 # simple multi-term linear model
@@ -8,7 +9,7 @@ library(preprocessCore)
 
 # remember: bw summary * length of region
 
-hist.norm <- function(dF){
+aqn <- function(dF){
     cn <- colnames(dF)
     rn <- rownames(dF)
     varstab <- cbind(apply(dF, 2, asinh))
@@ -27,6 +28,41 @@ lars.resid <- function(lar, y, x){
     ## Mallow's Cp for selecting on model size not RSS
     return(y - fi$fit[,which.min(summary(lar)$Cp)])
 }
+
+term.split <- function(term){
+    return(strsplit(term, ":|-"))
+}
+
+## from sketch in cem's notebook i took a picture of
+## format: geneID region:cpg [region:histX]*N
+proc.line <- function(l){
+    l <- strsplit(l,split=" +")[[1]]
+    gene <- l[1]
+    cpg <- l[2]
+    hists <- l[3:length(l)]
+    cpg <- term.split(cpg)
+    hists <- lapply(hists, term.split)
+    return(list(gene=gene, cpg=cpg, hists=hists))
+}
+
+## input is a single person's data.frame with lines in format above
+## regions are presumably constant across individuals due to
+## our region building strategy
+proc.dF <- function(dF){
+    lins <- apply(dF, 1, proc.line)
+    ## make regions
+    cpg.regions <- do.call(rbind, lapply(lins, function(xx){
+        return(xx$cpg[[1]]) 
+    }))
+    cpg.vals <- cpg.regions[,4]
+    cpg.regions <- GRanges(seqnames=Rle(cpg.regions[,1]),
+                           start=as.numeric(cpg.regions[,2]),
+                           end=as.numeric(cpg.regions[,3]))
+    histones <- lapply(lins, function(xx){
+        return(xx$hists)
+    })
+    
+
 
 ## data object generations
 
