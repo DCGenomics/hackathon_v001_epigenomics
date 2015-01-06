@@ -4,6 +4,10 @@ import sys
 import subprocess
 
 
+def validateFeatureParamFiles(fname):
+    print fname
+    
+
 def main():
     print "Starting Pipeline"
     print
@@ -22,8 +26,20 @@ def main():
         fout.write(line)
     fout.close()
     print "Done extracting regions"
+    
+    
+    
 
-    print "Extracting features in regions"
+    feature_param_fname = "/home/cemmeydan/inputTest3.txt"
+    print "Feature Extraction"
+    isFeaturesValid,errorMsgs = validateFeatureParamFiles(feature_param_fname)
+    
+    if not isFeaturesValid:
+        for val in errorMsgs:
+            print errorMsgs
+        print
+        sys.exit(1)
+    
 
     print "training model"
 
