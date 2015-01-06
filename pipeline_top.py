@@ -1,11 +1,18 @@
 #!/bin/python
 
 import sys
+import os
 import subprocess
 
 
 def validateFeatureParamFiles(fname):
+    f = open(fname)
+    for line in f:
+        line = line.strip()
+        items = line.split("\t")
+        print items
     print fname
+    return False,""
     
 
 def main():
