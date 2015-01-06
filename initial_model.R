@@ -35,16 +35,22 @@ lars.resid <- function(lar, y, x){
 step1 <- lm(y ~ cpg)
 step1.resid <- residuals(step1)
 # then lasso
-l.lars <- lars(step1.resid, hist1,type="lasso")
-# l.resid <- lars.resid(l.lars, y, step1.resid)
+step2 <- lars(step1.resid, hist1,type="lasso")
+# l.resid <- lars.resid(step2, y, step1.resid)
 # some debate about using mallow's cp vs cv - cp performs exceptionally well
 # according to efron if model is true...
 # some boilerplate for lasso with best model
 # h/t http://stats.stackexchange.com/a/121535/10530
+
+idx <- which.min(summary(step2)$Cp)
+## vs
 cv <- lars::cv.lars(x, y, plot.it=FALSE,mode="lasso")
 idx <- which.max(cv$cv - cv$cv.error <= min(cv$cv))
 
 ## feature extraction
 pthresh <- 0.05 # should be modified for multiple testing
-which(coef(lars::lars(x,y))[idx,] > 0)
+which(coef(step2)[idx,] > 0)
 which(summary(step1)$coefficients[,4] < p-thresh)
+# GOF
+summary(step1)$r.squared
+step2$R2[idx]
