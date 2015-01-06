@@ -1,0 +1,80 @@
+for s in $samples; do wget -r $s ; done
+mv ftp.ncbi.nlm.nih.gov/geo/samples/* . 
+
+for d in  */*/suppl; do  f=`ls $d | head -1 ` ; echo `dirname $d | tr "\/" "\t"` `echo $f | cut -f 3 -d .` ; done > meta_data.txt
+
+
+
+H1
+ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM409nnn/GSM409308/suppl/
+ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM466nnn/GSM466732/suppl/
+ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM429nnn/GSM429321/suppl/
+ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM429nnn/GSM429322/suppl/
+ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM432nnn/GSM432686/suppl/
+ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM432nnn/GSM432685/suppl/
+ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM429nnn/GSM429323/suppl/
+ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM605nnn/GSM605311/suppl/
+ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM667nnn/GSM667624/suppl/
+ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM605nnn/GSM605312/suppl/
+ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM537nnn/GSM537679/suppl/
+ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM466nnn/GSM466739/suppl/
+ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM434nnn/GSM434762/suppl/
+ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM433nnn/GSM433177/suppl/
+ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM409nnn/GSM409307/suppl/
+ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM605nnn/GSM605315/suppl/	
+ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM537nnn/GSM537681/suppl/
+ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM537nnn/GSM537680/suppl/
+ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM469nnn/GSM469971/suppl/
+ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM433nnn/GSM433170/suppl/
+ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM432nnn/GSM432392/suppl/
+ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM410nnn/GSM410808/suppl/	
+ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM409nnn/GSM409308/suppl/
+ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM484nnn/GSM484408/suppl/
+ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM915nnn/GSM915328/suppl/
+ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM915nnn/GSM915329/suppl/
+ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM621nnn/GSM621357/suppl/
+ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM621nnn/GSM621357/suppl/
+ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM621nnn/GSM621705/suppl/
+ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM621nnn/GSM621763/suppl/
+ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM621nnn/GSM621765/suppl/
+
+
+IMR90
+ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM432nnn/GSM432687/suppl/
+ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM432nnn/GSM432688/suppl/
+ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM432nnn/GSM432689/suppl/
+ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM432nnn/GSM432690/suppl/
+ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM432nnn/GSM432691/suppl/
+ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM432nnn/GSM432692/suppl/
+ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM469nnn/GSM469966/suppl/
+ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM521nnn/GSM521887/suppl/
+ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM521nnn/GSM521895/suppl/
+ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM521nnn/GSM521897/suppl/
+ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM521nnn/GSM521898/suppl/
+ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM469nnn/GSM469970/suppl/
+ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM521nnn/GSM521901/suppl/
+ftp://ftp.ncbi.nlm.nih.gov/geo/samples/GSM438nnn/GSM438363/suppl/
+
+GSM432nnn GSM432687 Bisulfite-Seq
+GSM432nnn GSM432688 Bisulfite-Seq
+GSM432nnn GSM432689 Bisulfite-Seq
+GSM432nnn GSM432690 Bisulfite-Seq
+GSM432nnn GSM432691 Bisulfite-Seq
+GSM432nnn GSM432692 Bisulfite-Seq
+GSM469nnn GSM469966 H3K27ac
+GSM469nnn GSM469970 H3K4me3
+GSM521nnn GSM521887 H3K27ac
+GSM521nnn GSM521895 H3K4me1
+
+
+GSM432nnn GSM432687 Bisulfite-Seq
+GSM432nnn GSM432688 Bisulfite-Seq
+GSM432nnn GSM432689 Bisulfite-Seq
+GSM432nnn GSM432690 Bisulfite-Seq
+GSM432nnn GSM432691 Bisulfite-Seq
+GSM432nnn GSM432692 Bisulfite-Seq
+GSM469nnn GSM469966 H3K27ac
+GSM469nnn GSM469970 H3K4me3
+GSM521nnn GSM521887 H3K27ac
+GSM521nnn GSM521895 H3K4me1
+
