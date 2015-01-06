@@ -8,7 +8,7 @@ rangeFile = "/epigenomes/teamdata/regions_typed.tab"
 rangeEnhancerFile = "/epigenomes/teamdata/sandelin_enh_expanded.bed"
 inputListFile = "/home/cemmeydan/inputTest3.txt"
 outputFile = "/epigenomes/teamdata/H1_dummyData.txt"
-numCores = 10
+numCores = 4
 
 
 read.tsv = function(file, sep="\t", header=T)
@@ -83,19 +83,17 @@ write.tsv(geneData2, outputFile)
 
 ############------ Modeling Start ------############
 
-
-modelRNA = function(i, geneDataList, rna)
-{
+modelRNA <- function(i, geneDataList){
     geneData = geneDataList[[i]]
-    geneData = dcast(data = geneData, formula = gene + patient ~ id + variable)
-    covari <- as.matrix(geneData[,-c(1:3)])
+    rna.id <- which(colnames(geneData) == "RNA")
+    covari <- as.matrix(geneData[,-c(1:4, rna.id)])
+    rna <- as.matrix(geneData[,rna.id])
+    rna <- log2(rna/sum(rna) + 0.5)
     # first local cpg model
     step1 <- cv.glmnet(covari, rna, standardize=TRUE)
     s1.c <- predict(step1, type="coefficients", s="lambda.1se")
-    return(s1.c)
+    return(cbind(unique(geneData$gene), s1.c[,1]))
 }
-
-
 
 # possible normalization strategy for at least histones
 aqn <- function(dF)
