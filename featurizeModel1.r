@@ -7,8 +7,8 @@ library(preprocessCore)
 rangeFile = "/epigenomes/teamdata/regions_typed.tab"
 rangeEnhancerFile = "/epigenomes/teamdata/sandelin_enh_expanded.bed"
 inputListFile = "/home/cemmeydan/inputTest3.txt"
-outputFile = "/epigenomes/teamdata/H1_dummyData2.txt"
-numCores = 10
+outputFile = "/epigenomes/teamdata/H1_dummyData.txt"
+numCores = 4
 
 
 read.tsv = function(file, sep="\t", header=T)
@@ -77,26 +77,16 @@ summaryData = GetRegionSignal(ranges, inputList)
 #summaryDataEnh = GetRegionSignal(rangesEnhancers, inputList)
 
 geneData = merge(ranges, summaryData, by="id")
-geneData2 = geneData[,c(1:3,7:ncol(geneData))]
-geneData2 = melt(geneData2, c("id", "gene", "region", "patient"))
-geneData2 = geneData2[ ! (geneData2$variable == "RNA" & geneData2$region != "body"), ]
-#geneData3 = dcast(geneData2, id+gene+patient~regionvariable)
+geneData2 = geneData[,c(1:2,6:ncol(geneData))]
+
 write.tsv(geneData2, outputFile)
 
 ############------ Modeling Start ------############
 
 modelRNA <- function(i, geneDataList){
     geneData = geneDataList[[i]]
-	rnaData = geneData[ geneData$variable=="RNA", c("gene","patient","value")]
-	colnames(rnaData)[3] = "RNA"
-	geneData = geneData[geneData$variable != "RNA", ]
-	geneData = dcast(geneData, gene+patient~region+variable)
-	geneData = merge(rnaData, geneData, by=c("gene","patient"))
-	
-	
-    metaData.id <- grep("gene|patient", colnames(geneData))
     rna.id <- which(colnames(geneData) == "RNA")
-    covari <- as.matrix(geneData[,-c(metaData.id, rna.id)])
+    covari <- as.matrix(geneData[,-c(1:4, rna.id)])
     rna <- as.matrix(geneData[,rna.id])
     rna <- log2(rna/sum(rna) + 0.5)
     # first local cpg model
