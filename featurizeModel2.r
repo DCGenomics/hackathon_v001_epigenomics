@@ -99,7 +99,7 @@ print("Reading inputs...")
 rangeFileTmpOut = paste0(basename(rangeGeneFile), ".uniq.bed")
 
 ## process gene ranges
-inputList = read.tsv(inputListFile, header=T)
+inputList = read.tsv(inputListFile, header=F)
 colnames(inputList) = c("Patient", "DataType", "DataFile", "Aggregation")
 rangesGene = read.tsv(rangeGeneFile, header=F)
 colnames(rangesGene) = c("id","gene","region","chr","start","end")
@@ -134,6 +134,8 @@ geneData2 = geneData2[ ! (geneData2$variable == "RNA" & geneData2$region != "bod
 
 write.tsv(geneData2, outputSummaryFile)
 
+
+return (cbind(unique(geneData$gene), rep.int(0, ncol(covari)+1)))
 
 ############------ Modeling Start ------############
 modelRNA <- function(i, geneDataList){
@@ -208,16 +210,7 @@ geneDataList = split(geneData2, f = geneData2$gene )
 
 print("Building the model...")
 
-results = parallel::mclapply(1:length(geneDataList), function(xx){
-    print(xx)
-    tryCatch({
-      modelRNA(xx,  geneDataList)
-    }, error=function(e)
-          { print(e)
-        #    print(geneDataList[[xx]])
-        }
-            )}, 
-    mc.cores=numCores)
+results = parallel::mclapply(1:length(geneDataList), modelRNA,  geneDataList, mc.cores=numCores)
 
 results2 = rbindlist(results)
 write.tsv(results2, outputCoefsFile)
