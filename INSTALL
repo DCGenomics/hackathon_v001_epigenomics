@@ -11,12 +11,13 @@
 #### sudo mkdir -p /epigenomics && sudo mount /dev/xvdf /epigenomics
 #
 #  # Standard developer tools
+####  sudo apt-get update 
 ####  sudo apt-get install -y build-essential python perl openjdk-7-jre emacs vim
 #
 #  Install R-3, requires CRAN mirror, not mainline Ubuntu
 #  
 ####  echo deb http://watson.nci.nih.gov/cran_mirror/bin/linux/ubuntu precise/ | sudo tee /etc/apt/sources.list.d/R.list
-####  gpg -a --export E084DAB9 | sudo apt-key add - && sudo apt-get update && sudo apt-get -y install r-core r-base
+####  gpg -a --export E084DAB9 | sudo apt-key add - && sudo apt-get update && sudo apt-get -y install r-core
 #
 #
 #  Packages that were installed during development:
@@ -66,7 +67,7 @@
 #  https://github.com/Ensembl/WiggleTools/releases/download/v1.0/wiggletools_x86_64_linux
 #
 #  # Create /etc/profile.d/Z98biotools.sh to include those directories in PATH
-#### cat -> /etc/profile.d/Z98biotools.sh <<END
+####sudo cat -> /etc/profile.d/Z98biotools.sh <<END
 #### #!/bin/sh
 #### for i in wiggletools bedtools2 ucsc_tools MACS/bin/ samtools/usr/local/bin bowtie2 bismark STAR/bin/Linux_x86_64 
 ####    do export PATH="/usr/local/$i:$PATH" 
