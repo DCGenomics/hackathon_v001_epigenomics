@@ -93,7 +93,7 @@ def main():
     enhancerRangeFile = "/epigenomes/teamdata/sandelin_enh_expanded.bed"
     #args = []
     #featurizeModel.r geneRangeFile enhancerRangeFile inputBigWigFile
-    args = ["Rscript","featurizeModel2.r",enhancerRangeFile,feature_param_fname]
+    args = ["Rscript","featurizeModel2.r",output_fname,enhancerRangeFile,feature_param_fname]
     print "\t".join(args)
 
     #proc = subprocess.Popen(args,stdout=subprocess.PIPE)
