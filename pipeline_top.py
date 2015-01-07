@@ -47,12 +47,12 @@ def validateFeatureParamFiles(fname):
             if val in required and val == "RNA":
                 hasRna == True
             
-            if not hasRna:
-                errors.append("data set %s has no RNA"%(p))
-            
-            
-            if len(pkeys) == 2 and hasRna:
-                feature_warnings.append("warning: data set %s has only two features, three or more recomended."%(p))
+        if not hasRna:
+            errors.append("data set %s has no RNA"%(p))
+        
+        
+        if len(pkeys) == 2 and hasRna:
+            feature_warnings.append("warning: data set %s has only two features, three or more recomended."%(p))
 
         #print items
     #print fname
