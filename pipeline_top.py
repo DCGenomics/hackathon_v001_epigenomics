@@ -89,8 +89,12 @@ def main():
         print
         sys.exit(1)
         
-    args = []
-    #args = ["R","generateRegions.py",refgene_fname]
+        
+    enhancerRangeFile = "/epigenomes/teamdata/sandelin_enh_expanded.bed"
+    #args = []
+    #featurizeModel.r geneRangeFile enhancerRangeFile inputBigWigFile
+    args = ["Rscript","featurizeModel2.r",enhancerRangeFile,feature_param_fname]
+    print "\t".join(args)
 
     #proc = subprocess.Popen(args,stdout=subprocess.PIPE)
     #out = proc.communicate()[0]
