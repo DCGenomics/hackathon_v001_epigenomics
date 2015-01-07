@@ -14,7 +14,6 @@
 ####  sudo apt-get upgrade -y
 ####  sudo apt-get install -y build-essential python perl openjdk-7-jre emacs vim
 #
-#
 # #  Install R-3, requires CRAN mirror, not mainline Ubuntu
 #  
 ####  echo deb http://watson.nci.nih.gov/cran_mirror/bin/linux/ubuntu precise/ | sudo tee /etc/apt/sources.list.d/R.list
@@ -46,10 +45,10 @@
 # # Additional packages
 #
 #  Undeclared dependency for one (MACS?) of the bioinformatics tools
-####  sudo apt-get install -y libgsl0ldbl libgsl0-dev
+#  sudo apt-get install -y libgsl0ldbl libgsl0-dev
 #
-#  Undeclared dependency to install biomaRt
-####  sudo apt-get install -y libcurl4-nss-dev
+#  Undeclared dependency to install biomaRt R package
+#  sudo apt-get install -y libcurl4-nss-dev
 #
 #  Install bioinformatics software into /usr/local/[package]-[version]; symlink to /usr/local/[package]
 #
