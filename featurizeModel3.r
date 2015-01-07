@@ -137,10 +137,11 @@ write.tsv(geneData2, outputSummaryFile)
 
 
 ############------ Modeling Start ------############
-modelRNA <- function(i, geneDataList){
-
-
-    geneData = geneDataList[[i]]
+modelRNA <- function(i, geneNames, geneDataAll)
+{
+	geneName = geneNames[i]
+	geneData = geneDataAll[geneDataAll$gene == geneName, ]
+    #geneData = geneDataList[[i]]
 
 
     rnaData = geneData[ geneData$variable=="RNA", c("gene","patient","value")]
@@ -159,7 +160,6 @@ modelRNA <- function(i, geneDataList){
 		if (length(enh.id) != 0){ covari <- cbind(covari, enh) }
 		return(data.frame(gene=unique(geneData$gene)[1],
 						   variable=c("(Intercept)", colnames(covari)),
-
 						   coefficient=rep.int(0, 1+ncol(covari)), row.names=NULL))
 	}
     rna <- log2((rna+0.5)/sum(rna+1)*1e6)
@@ -183,7 +183,6 @@ modelRNA <- function(i, geneDataList){
                 if (length(enh.id) != 0){ covari <- cbind(covari, enh) }
 	    	    return(data.frame(gene=unique(geneData$gene),
                                       variable=c("(Intercept)", colnames(covari)),
-
                                       coefficient=rep.int(0, ncol(covari)+1), row.names=NULL))
     })## end tryCatch
 }
@@ -207,12 +206,13 @@ better.scale <- function(mat)
     return(nmat)
 }
 
-geneData2 = read.tsv(outputSummaryFile)
-geneDataList = split(geneData2, f = geneData2$gene )
+#geneData2 = read.tsv(outputSummaryFile)
+geneNames = unique(geneData2$gene)
+#geneDataList = split(geneData2, f = geneData2$gene )
 
 print("Building the model...")
 
-results = parallel::mclapply(1:length(geneDataList), modelRNA,  geneDataList, mc.cores=numCores)
+results = parallel::mclapply(1:length(geneNames), modelRNA, geneNames, geneData2, mc.cores=numCores)
 
 results2 = rbindlist(results)
 write.tsv(results2, outputCoefsFile)
