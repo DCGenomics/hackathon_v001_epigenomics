@@ -68,18 +68,18 @@
 #  https://github.com/Ensembl/WiggleTools/releases/download/v1.0/wiggletools_x86_64_linux
 #
 #  # Create /etc/profile.d/Z98biotools.sh to include those directories in PATH
-####sudo cat -> /etc/profile.d/Z98biotools.sh <<END
-#### #!/bin/sh
-#### for i in wiggletools bedtools2 ucsc_tools MACS/bin/ samtools/usr/local/bin bowtie2 bismark STAR/bin/Linux_x86_64 
-####    do export PATH="/usr/local/$i:$PATH" 
-#### done
-####END
+#cat /etc/profile.d/Z98biotools.sh <<END
+# #!/bin/sh
+# for i in wiggletools bedtools2 ucsc_tools MACS/bin/ samtools/usr/local/bin bowtie2 bismark STAR/bin/Linux_x86_64 
+#    do export PATH="/usr/local/$i:$PATH" 
+# done
+#END
 #### sudo chmod a+x /etc/profile.d/Z98biotools
 #
 #   #   Set umask to 002 to help group collaboration - in English, this means that by default files are created as user read/write/execute, group read/write/execute, other read/execute; or mode 775.
 #   #   /etc/login.defs; UMASK 002
 #   #   alt. /etc/profile; umask 002
-#### sed -i -e 's/^UMASK 022/UMASK 002/g /etc/login.defs
+#### sed -i -e 's/^UMASK 022/UMASK 002/g' /etc/login.defs
 #
 #   #  _IF_ we’re using Spark
 # curl http://archive.cloudera.com/cdh5/ubuntu/precise/amd64//cdh/archive.key | sudo apt-key add -
