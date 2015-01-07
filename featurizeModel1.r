@@ -3,12 +3,14 @@ library(plyr)
 library(reshape2)
 library(glmnet)
 library(preprocessCore)
+library(GenomicRanges)
 
-rangeFile = "/epigenomes/teamdata/regions_typed.tab"
+rangeGeneFile = "/epigenomes/teamdata/regions_typed.tab"
 rangeEnhancerFile = "/epigenomes/teamdata/sandelin_enh_expanded.bed"
 inputListFile = "/home/cemmeydan/inputTest3.txt"
-outputFile = "/epigenomes/teamdata/H1_dummyData2.txt"
+outputFile = "/epigenomes/teamdata/H1_dummyData3.txt"
 numCores = 10
+enhancerProximity = 1e+05
 
 
 read.tsv = function(file, sep="\t", header=T)
@@ -21,11 +23,18 @@ write.tsv = function(object, file, sep="\t", header=T)
 	write.table(object, file, sep=sep, col.names=header, quote=F, row.names=F)
 }
 
-
 ############------ Featurization Start ------############
 
-## Summarizes a list of signal from a list of files
+## GetRegionSignal: Summarizes a list of signal for a list of given intervals
 ## Input: 
+## ranges = data.frame, giving the regions the signals will be summarized over (gene bodies, introns, enhancers...). MUST contain the fields chr/start/end and a unique field named id
+## inputList = data.frame, list of *bigWig* files that contains the signal (histone peaks, TFBS, DNA methylation, RNAseq). 
+##            	Row format is of (Patient, DataType, DataFile, Aggregation) where each field is as described below. Each unique patient MUST contain a row with DataType of "RNA".
+##					Patient: A patient id
+##					DataType: A text describing the signal. 
+##					DataFile: Path to the bigWig file
+##					Aggregation: how to summarize the data over the peak. can take values (mean, min, max, sum, mean0). mean will give the mean value in only the covered bases whereas mean0 will average over zeroes as well
+## Output: data.frame containing tuples of (gene, region, patient, DataType, Summarized value)
 GetRegionSignal = function(ranges, inputList)
 {
 	rangesUniq = unique(data.frame(ranges[,c("chr","start","end","id")]))
@@ -57,31 +66,38 @@ GetRegionSignal = function(ranges, inputList)
 	return(summaryData2)
 }
 
-rangeFileTmpOut = paste0(basename(rangeFile), ".uniq.bed")
+rangeFileTmpOut = paste0(basename(rangeGeneFile), ".uniq.bed")
 
 inputList = read.tsv(inputListFile)
-ranges = read.tsv(rangeFile, header=F)
-colnames(ranges) = c("id","gene","region","chr","start","end")
-ranges$id = paste(ranges$chr, ranges$start, ranges$end, sep=".")
-
-###
-#ranges = ranges[1:600,]
+rangesGene = read.tsv(rangeGeneFile, header=F)
+colnames(rangesGene) = c("id","gene","region","chr","start","end")
+rangesGene$id = paste(rangesGene$chr, rangesGene$start, rangesGene$end, sep=".")
 
 rangesEnhancers = read.tsv(rangeEnhancerFile, header=T, sep=" ")
 rangesEnhancers = rangesEnhancers[,1:3]
 rownames(rangesEnhancers) = NULL
 colnames(rangesEnhancers) = c("chr","start","end")
 rangesEnhancers$id = paste(rangesEnhancers$chr, rangesEnhancers$start, rangesEnhancers$end, sep=".")
+rangesEnhancers$region = paste0("enhancer.", rangesEnhancers$id)
 
-summaryData = GetRegionSignal(ranges, inputList)
-#summaryDataEnh = GetRegionSignal(rangesEnhancers, inputList)
+rangesGenebody = unique(rangesGene[rangesGene$region == "body",c("gene","chr","start","end")])
+grGeneFlanking = GRanges(seqnames=rangesGenebody$chr, rangesGene = IRanges(start=rangesGenebody$start-enhancerProximity, end=rangesGenebody$end+enhancerProximity), gene=rangesGenebody$gene)
+grEnhancer = GRanges(seqnames=rangesEnhancers$chr, rangesGene = IRanges(start=rangesEnhancers$start, end=rangesEnhancers$end), id=rangesEnhancers$id, region=rangesEnhancers$region)
+overlapGeneEnh = findOverlaps(grEnhancer, grGeneFlanking)
+overlapGeneEnh2 = data.frame(id=grEnhancer$id[overlapGeneEnh@queryHits], gene=grGeneFlanking$gene[ overlapGeneEnh@subjectHits], region=grEnhancer$region[overlapGeneEnh@queryHits], chr=grEnhancer@seqnames[overlapGeneEnh@queryHits], start=grEnhancer@rangesGene@start[overlapGeneEnh@queryHits], end=grEnhancer@rangesGene@start[overlapGeneEnh@queryHits]+grEnhancer@rangesGene@width[overlapGeneEnh@queryHits]-1)
 
-geneData = merge(ranges, summaryData, by="id")
+rangesGenesEnh = rbind(rangesGene, overlapGeneEnh2)
+
+summaryData = GetRegionSignal(rangesGenesEnh, inputList)
+geneData = merge(rangesGenesEnh, summaryData, by="id")
 geneData2 = geneData[,c(1:3,7:ncol(geneData))]
 geneData2 = melt(geneData2, c("id", "gene", "region", "patient"))
 geneData2 = geneData2[ ! (geneData2$variable == "RNA" & geneData2$region != "body"), ]
-#geneData3 = dcast(geneData2, id+gene+patient~regionvariable)
+
 write.tsv(geneData2, outputFile)
+
+
+
 
 ############------ Modeling Start ------############
 
@@ -102,7 +118,8 @@ modelRNA <- function(i, geneDataList){
     # first local cpg model
     step1 <- cv.glmnet(covari, rna, standardize=TRUE)
     s1.c <- predict(step1, type="coefficients", s="lambda.1se")
-    return(cbind(unique(geneData$gene), s1.c[,1]))
+    coefs = data.frame(gene=unique(geneData$gene), variable=rownames(s1.c), coefficient=s1.c[,1], row.names=NULL)
+	return(coefs)
 }
 
 # possible normalization strategy for at least histones
