@@ -8,7 +8,8 @@ library(GenomicRanges)
 rangeGeneFile = "/epigenomes/teamdata/regions_typed.tab"
 rangeEnhancerFile = "/epigenomes/teamdata/sandelin_enh_expanded.bed"
 inputListFile = "/home/cemmeydan/inputTest3.txt"
-outputFile = "/epigenomes/teamdata/H1_dummyData3.txt"
+outputSummaryFile = "/epigenomes/teamdata/H1_dummyData3.txt"
+outputCoefsFile = "/epigenomes/teamdata/H1_dummyData3_coefs.txt"
 numCores = 10
 enhancerProximity = 1e+05
 
@@ -68,11 +69,13 @@ GetRegionSignal = function(ranges, inputList)
 
 rangeFileTmpOut = paste0(basename(rangeGeneFile), ".uniq.bed")
 
+## process gene ranges
 inputList = read.tsv(inputListFile)
 rangesGene = read.tsv(rangeGeneFile, header=F)
 colnames(rangesGene) = c("id","gene","region","chr","start","end")
 rangesGene$id = paste(rangesGene$chr, rangesGene$start, rangesGene$end, sep=".")
 
+## process enhancer ranges
 rangesEnhancers = read.tsv(rangeEnhancerFile, header=T, sep=" ")
 rangesEnhancers = rangesEnhancers[,1:3]
 rownames(rangesEnhancers) = NULL
@@ -80,6 +83,7 @@ colnames(rangesEnhancers) = c("chr","start","end")
 rangesEnhancers$id = paste(rangesEnhancers$chr, rangesEnhancers$start, rangesEnhancers$end, sep=".")
 rangesEnhancers$region = paste0("enhancer.", rangesEnhancers$id)
 
+## find enhancers within {enhancerProximity} distance to each gene
 rangesGenebody = unique(rangesGene[rangesGene$region == "body",c("gene","chr","start","end")])
 grGeneFlanking = GRanges(seqnames=rangesGenebody$chr, rangesGene = IRanges(start=rangesGenebody$start-enhancerProximity, end=rangesGenebody$end+enhancerProximity), gene=rangesGenebody$gene)
 grEnhancer = GRanges(seqnames=rangesEnhancers$chr, rangesGene = IRanges(start=rangesEnhancers$start, end=rangesEnhancers$end), id=rangesEnhancers$id, region=rangesEnhancers$region)
@@ -88,16 +92,17 @@ overlapGeneEnh2 = data.frame(id=grEnhancer$id[overlapGeneEnh@queryHits], gene=gr
 
 rangesGenesEnh = rbind(rangesGene, overlapGeneEnh2)
 
+## Calculate the signal for the genic and enhancer regions
 summaryData = GetRegionSignal(rangesGenesEnh, inputList)
 geneData = merge(rangesGenesEnh, summaryData, by="id")
 geneData2 = geneData[,c(1:3,7:ncol(geneData))]
 geneData2 = melt(geneData2, c("id", "gene", "region", "patient"))
 geneData2 = geneData2[ ! (geneData2$variable == "RNA" & geneData2$region != "body"), ]
 
-write.tsv(geneData2, outputFile)
+write.tsv(geneData2, outputSummaryFile)
 
 
-
+return (cbind(unique(geneData$gene), rep.int(0, ncol(covari)+1)))
 
 ############------ Modeling Start ------############
 
@@ -113,7 +118,10 @@ modelRNA <- function(i, geneDataList){
     rna.id <- which(colnames(geneData) == "RNA")
     covari <- as.matrix(geneData[,-c(metaData.id, rna.id)])
     rna <- as.matrix(geneData[,rna.id])
-    if (all(rna == 0)){return(cbind(unique(geneData$gene), rep.int(0, ncol(covari)+1)))}
+    if (all(rna == 0))
+	{
+		return(data.frame(gene=unique(geneData$gene), variable=c("(Intercept)", colnames(covari)), coefficient=rep.int(0, ncol(covari)+1), row.names=NULL))
+	}
     rna <- log2((rna+0.5)/sum(rna+1)*1e6)
     # first local cpg model
     step1 <- cv.glmnet(covari, rna, standardize=TRUE)
@@ -142,16 +150,20 @@ better.scale <- function(mat)
     return(nmat)
 }
 
-geneData2 = read.tsv(outputFile)
+geneData2 = read.tsv(outputSummaryFile)
 geneDataList = split(geneData2, f = geneData2$gene )
 
-#res = t(simplify2array(parallel::mclapply(1:length(geneDataList), modelRNA, geneDataList, mc.cores=numCores)))
+results = parallel::mclapply(1:length(geneDataList), modelRNA, geneDataList, mc.cores=numCores)
+results2 = rbindlist(results)
+write.tsv(results2, outputCoefsFile)
 
-res = t(parallel::mclapply(500:600, function(ii){
-#    print(ii)
-    modelRNA(ii, geneDataList)
-}, mc.cores=4))
+#res = rbindlist(parallel::mclapply(1:100, modelRNA, geneDataList, mc.cores=numCores))
 
+# res = t(parallel::mclapply(500:600, function(ii){
+# #    print(ii)
+#     modelRNA(ii, geneDataList)
+# }, mc.cores=4))
+# 
 
 
 
