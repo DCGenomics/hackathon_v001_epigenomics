@@ -153,21 +153,36 @@ modelRNA <- function(i, geneDataList){
     rna <- as.matrix(geneData[,rna.id])
     if (all(rna == 0))
 	{
+            if (length(enh.id) == 0){ covari <- cbind(covari, enh) }
 		return(data.frame(gene=unique(geneData$gene),
                                   variable=c("(Intercept)",
                                       colnames(covari)),
-                                  coefficient=rep.int(0, ncol(covari)+1+length(enh.id)), row.names=NULL))
+                                  coefficient=rep.int(0, ncol(covari)+1), row.names=NULL))
 	}
     rna <- log2((rna+0.5)/sum(rna+1)*1e6)
     # first local cpg model
-    step1 <- cv.glmnet(covari, rna, standardize=TRUE)
-    s1.c <- predict(step1, type="coefficients", s="lambda.1se")
-    s1.fit <- predict(step1, newx=covari, s="lambda.1se")
-    residual <- rna - s1.fit
-    step2 <- cv.glmnet(enh, residual, standardize=TRUE, intercept=FALSE)
-    s2.c <- predict(step2, type="coefficients", s="lambda.1se")
-    coefs = data.frame(gene=unique(geneData$gene), variable=c(rownames(s1.c), rownames(s2.c)[-1]), coefficient=c(s1.c[,1],s2.c[-1,1]), row.names=NULL)
-    return(coefs)
+    tryCatch({
+        step1 <- cv.glmnet(covari, rna, standardize=TRUE)
+        s1.c <- predict(step1, type="coefficients", s="lambda.1se")
+        rnames.s.c <- rownames(s1.c)
+        c.s.c <- s1.c[,1]
+        s1.fit <- predict(step1, newx=covari, s="lambda.1se")
+        residual <- rna - s1.fit
+        if (length(enh.id) != 0){
+            step2 <- cv.glmnet(enh, residual, standardize=TRUE, intercept=FALSE)
+            s2.c <- predict(step2, type="coefficients", s="lambda.1se")
+            rnames.s.c <- c(rnames.s.c, rownames(s2.c)[-1])
+            c.s.c <- c(c.s.c, s2.c[-1,1])
+        }
+        coefs = data.frame(gene=unique(geneData$gene), variable=rnames.s.c, coefficient=c.s.c, row.names=NULL)
+        return(coefs)
+    }, error=function(e){
+                if (length(enh.id) == 0){ covari <- cbind(covari, enh) }
+	    	    return(data.frame(gene=unique(geneData$gene),
+                                      variable=c("(Intercept)",
+                                          colnames(covari)),
+                                      coefficient=rep.int(0, ncol(covari)+1), row.names=NULL))
+    })## end tryCatch
 }
 
 # possible normalization strategy for at least histones
@@ -185,7 +200,7 @@ aqn <- function(dF)
 better.scale <- function(mat)
 {
     nmat <- apply(mat, 2, function(xx){
-        if (all(xx == 0)){ return(xx) }
+        if (all(xx == unique(xx))){ return(xx) }
         else{ return(scale(xx)) } })
     return(nmat)
 }
@@ -194,7 +209,18 @@ geneData2 = read.tsv(outputSummaryFile)
 geneDataList = split(geneData2, f = geneData2$gene )
 
 print("Building the model...")
-results = parallel::mclapply(1:length(geneDataList), modelRNA, geneDataList, mc.cores=numCores)
+
+results = parallel::mclapply(1:length(geneDataList), function(xx){
+    print(xx)
+    tryCatch({
+      modelRNA(xx,  geneDataList)
+    }, error=function(e)
+          { print(e)
+        #    print(geneDataList[[xx]])
+        }
+            )}, 
+    mc.cores=numCores)
+
 results2 = rbindlist(results)
 write.tsv(results2, outputCoefsFile)
 results3 = results2[results2$variable != "(Intercept)" & results2$coefficient = 0, ]
