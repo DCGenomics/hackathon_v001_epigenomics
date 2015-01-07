@@ -1,7 +1,6 @@
 # Creating Testable and Integrative Epigenetic models of Transcription
 
 ### Prerequites:
-=======
 "There is an abundance of epigenetic data encompassing a wide variety of markers over many different cell types.
 This surfeit of information empowers labs to infer how these different markers contribute to gene expression and 
 chromatin state. However, there is currently no existing methodology to elucidate relationships between epigenetic 
@@ -15,7 +14,6 @@ based tools."
 
 
 Prerequites:
->>>>>>> 3ac1e783e768248c7b84c046f9cd848f00ea13f8
 R version >3.0 (Packages: data.table, plyr, reshape2, glmnet, preprocessCore, GenomicRanges) 
 Python version >2.7 but not 3.0 
 
