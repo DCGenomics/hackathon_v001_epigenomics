@@ -18,12 +18,21 @@ if(length(args) >= 5) outputCoefsFile = args[5]
 if(length(args) >= 6) numCores = as.integer(args[6])
 if(length(args) >= 7) enhancerProximity = as.integer(args[7])
 
-suppressMessages(library(data.table)    )
-suppressMessages(library(plyr)          )
-suppressMessages(library(reshape2)      )
-suppressMessages(library(glmnet)        )
-suppressMessages(library(preprocessCore))
-suppressMessages(library(GenomicRanges) )
+
+if("data.table" %in% rownames(installed.packages()) == FALSE) install.packages("data.table")
+if("plyr" %in% rownames(installed.packages()) == FALSE) install.packages("plyr")
+if("reshape2" %in% rownames(installed.packages()) == FALSE) install.packages("reshape2")
+if("glmnet" %in% rownames(installed.packages()) == FALSE) install.packages("glmnet")
+if("GenomicRanges" %in% rownames(installed.packages()) == FALSE) { source("http://bioconductor.org/biocLite.R"); biocLite("GenomicRanges"); }
+if("preprocessCore" %in% rownames(installed.packages()) == FALSE) { source("http://bioconductor.org/biocLite.R"); biocLite("preprocessCore"); }
+
+
+suppressMessages(require(data.table)    )
+suppressMessages(require(plyr)          )
+suppressMessages(require(reshape2)      )
+suppressMessages(require(glmnet)        )
+suppressMessages(require(preprocessCore))
+suppressMessages(require(GenomicRanges) )
 
 
 
