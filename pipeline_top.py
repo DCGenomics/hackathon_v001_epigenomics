@@ -41,8 +41,9 @@ def validateFeatureParamFiles(fname):
     for p in patient_map:
         hasRna = False
         pkeys = patient_map[p]
-        
+        print pkeys
         for val in pkeys:
+            print val
             if val in required and val == "RNA":
                 hasRna == True
             
