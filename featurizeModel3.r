@@ -225,6 +225,32 @@ modelRNA <- function(i, geneNames, geneDataAll)
 }
 
 
+# modelRNA.fast <- function(i, geneDataList){
+#     geneData = geneDataList[[i]]
+#     rnaData = geneData[ geneData$variable=="RNA", c("gene","patient","value")]
+#     colnames(rnaData)[3] = "RNA"
+#     geneData = geneData[geneData$variable != "RNA", ]
+#     geneData = dcast(geneData, gene+patient~region+variable, fun.aggregate=mean)
+#     geneData = merge(rnaData, geneData, by=c("gene","patient"))
+# 	apply(geneData, 2, sd)
+# 	
+#     metaData.id <- grep("gene|patient", colnames(geneData))
+#     rna.id <- which(colnames(geneData) == "RNA")
+#     covari <- as.matrix(geneData[,-c(metaData.id, rna.id)])
+#     rna <- as.matrix(geneData[,rna.id])
+#     if (all(rna == 0))
+# 	{
+# 		return(data.frame(gene=unique(geneData$gene), variable=c("(Intercept)", colnames(covari)), coefficient=rep.int(0, ncol(covari)+1), row.names=NULL))
+# 	}
+#     rna <- log2((rna+0.5)/sum(rna+1)*1e6)
+#     # first local cpg model
+#     step1 <- cv.glmnet(covari, rna, standardize=TRUE)
+#     s1.c <- predict(step1, type="coefficients", s="lambda.1se")
+#     coefs = data.frame(gene=unique(geneData$gene), variable=rownames(s1.c), coefficient=s1.c[,1], row.names=NULL)
+# 	return(coefs)
+# }
+
+
 # possible normalization strategy for at least histones
 aqn <- function(dF)
 {
