@@ -12,6 +12,7 @@
 #
 #  # Standard developer tools
 ####  sudo apt-get update 
+####  sudo apt-get upgrade -y
 ####  sudo apt-get install -y build-essential python perl openjdk-7-jre emacs vim
 #
 #  Install R-3, requires CRAN mirror, not mainline Ubuntu
@@ -31,10 +32,12 @@
 ## Packages required based on current code
 ## To grab a list of required R libraries
 #  find . -name "*.[rR]" -exec grep -P '^\s*library' {} \; | sort | uniq | perl -ple 's/^.*\((.*?)\)/$1/'
+# # Set R CRAN default
+echo 'local({ r <- getOption("repos") ; r["CRAN"] <- "http://watson.nci.nih.gov/cran_mirror/" ; options(repos = r);})' | sudo tee /etc/R/Rprofile.site
 ## Do standard R packages
 ####  for i in data.table glmnet lars plyr reshape2 ; do sudo R -e "install.packages('$i')" ; done
 ## Do BioConductor packages
-####  for i in bsseq GenomicRanges preprocessCore ; do R -e "source('http://bioconductor.org/biocLite.R') ; biocLite('$i')" ; done
+####  for i in bsseq GenomicRanges preprocessCore ; do sudo R -e "source('http://bioconductor.org/biocLite.R') ; biocLite('$i')" ; done
 #
 #  # Additional packages
 #
