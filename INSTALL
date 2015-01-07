@@ -10,10 +10,6 @@
 #  Create 1TB EBS volume, typically found as /dev/xvdf, attach to instance and mount as /epigenomics/
 #### sudo mkdir -p /epigenomics && sudo mount /dev/xvdf /epigenomics
 #
-#  Create /epigenomics/teamdata group writeable for team_epigenomics
-#
-#### sudo mkdir -p /epigenomics/teamdata/ && sudo chgrp team_epigenomics /epigenomics/teamdata && sudo chmod g+rwxs /epigenomics/teamdata
-#
 #  # Standard developer tools
 ####  sudo apt-get install -y build-essentials python perl openjdk-7-jre emacs vim
 #
@@ -22,9 +18,6 @@
 ####  echo deb http://watson.nci.nih.gov/cran_mirror/bin/linux/ubuntu precise/ | sudo tee /etc/apt/sources.list.d/R.list
 ####  gpg -a --export E084DAB9 | sudo apt-key add - && sudo apt-get update && sudo apt-get install r-core r-base
 #
-#  Make /usr/local/lib/R/site-library group-writeable so ordinary users can install packages, bioconductor, from R
-#
-#### sudo mkdir -p /usr/local/lib/R/site-library && sudo chgrp team_epigenomics /usr/local/lib/R/site-library && sudo chmod g+rwx /usr/local/lib/R/site-library
 #
 #  Packages that were installed during development:
 #  AnnotationDbi/  BiocInstaller/  colorspace/  dplyr/          gtable/    locfit/       munsell/         RColorBrewer/  RSQLite/    stringr/
@@ -37,9 +30,9 @@
 ## To grab a list of required R libraries
 #  find . -name "*.[rR]" -exec grep -P '^\s*library' {} \; | sort | uniq | perl -ple 's/^.*\((.*?)\)/$1/'
 ## Do standard R packages
-####  for i in data.table glmnet lars plyr reshape2 ; do sudo -g team_epigenomics R -e "install.packages('$i')" ; done
+####  for i in data.table glmnet lars plyr reshape2 ; do sudo R -e "install.packages('$i')" ; done
 ## Do BioConductor packages
-####  for i in bsseq GenomicRanges preprocessCore ; do R -g team_epigenomics -e "source('http://bioconductor.org/biocLite.R') ; biocLite('$i')" ; done
+####  for i in bsseq GenomicRanges preprocessCore ; do R -e "source('http://bioconductor.org/biocLite.R') ; biocLite('$i')" ; done
 #
 #  # Additional packages
 #
