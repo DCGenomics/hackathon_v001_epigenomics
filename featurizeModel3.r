@@ -29,7 +29,7 @@ suppressMessages(library(GenomicRanges) )
 
 #rangeGeneFile = "/epigenomes/teamdata/regions_typed.tab"
 #rangeEnhancerFile = "/epigenomes/teamdata/sandelin_enh_expanded.bed"
-#inputListFile = "/epigenomes/teamdata/final_dataset/final_bigwig_files.txt"
+#inputListFile = "/epigenomes/teamdata/test_data/bigwig_files.txt"
 #outputSummaryFile = "allBigWigFiles.txt"
 #outputCoefsFile = "allBigWigFiles_coefs.txt"
 #numCores = 10
@@ -85,9 +85,9 @@ GetRegionSignal = function(ranges, inputList)
 		curSummary = melt(curSummary, c("id","patient"))
 		
 		summaryData = rbind(summaryData, curSummary)
-		#file.remove(tempOut, showWarnings=F)
+		file.remove(tempOut, showWarnings=F)
 	}
-	#file.remove(rangeFileTmpOut, showWarnings=F)
+	file.remove(rangeFileTmpOut, showWarnings=F)
 	summaryData2 = dcast(summaryData, id+patient ~ variable, fun.aggregate=mean) ## If everything is correct we shouldn't need fun.aggregate now
 	return(summaryData2)
 }
@@ -135,8 +135,6 @@ geneData2 = geneData2[ ! (geneData2$variable == "RNA" & geneData2$region != "bod
 
 write.tsv(geneData2, outputSummaryFile)
 
-
-return (cbind(unique(geneData$gene), rep.int(0, ncol(covari)+1)))
 
 ############------ Modeling Start ------############
 modelRNA <- function(i, geneDataList){
