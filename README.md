@@ -18,7 +18,8 @@ R version >3.0 (Packages: data.table, plyr, reshape2, glmnet, preprocessCore, Ge
 Python version >2.7 but not 3.0 
 
 ### Inputs:
-2+ sets (patient/replicates) of bigWig files. Inputs are given in an input text of format (including a header):
+2+ sets (patient/replicates) of bigWig files. Inputs are given in an input text file of format (including a header, **tab separated**):
+
 [patient/cell name] [assay type] [absolute file location]  [aggregation function]
 
 ### Example:
