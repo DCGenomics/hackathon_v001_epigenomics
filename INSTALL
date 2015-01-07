@@ -18,7 +18,7 @@
 #  
 ####  echo deb http://watson.nci.nih.gov/cran_mirror/bin/linux/ubuntu precise/ | sudo tee /etc/apt/sources.list.d/R.list
 ####  sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E084DAB9
-####  sudo apt-get update && sudo apt-get -y install r-core
+####  sudo apt-get update && sudo apt-get -y install r-core r-base-core
 #
 #
 #  Packages that were installed during development:
@@ -74,12 +74,12 @@
 #    do export PATH="/usr/local/$i:$PATH" 
 # done
 #END
-#### sudo chmod a+x /etc/profile.d/Z98biotools
+# sudo chmod a+x /etc/profile.d/Z98biotools
 #
 #   #   Set umask to 002 to help group collaboration - in English, this means that by default files are created as user read/write/execute, group read/write/execute, other read/execute; or mode 775.
 #   #   /etc/login.defs; UMASK 002
 #   #   alt. /etc/profile; umask 002
-#### sed -i -e 's/^UMASK 022/UMASK 002/g' /etc/login.defs
+# sed -i -e 's/^UMASK 022/UMASK 002/g' /etc/login.defs
 #
 #   #  _IF_ we’re using Spark
 # curl http://archive.cloudera.com/cdh5/ubuntu/precise/amd64//cdh/archive.key | sudo apt-key add -
