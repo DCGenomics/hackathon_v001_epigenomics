@@ -4,6 +4,8 @@ import sys
 import os
 import subprocess
 
+import getopt
+
 
 def validateFeatureParamFiles(fname):
     required = set("RNA")
@@ -56,13 +58,24 @@ def validateFeatureParamFiles(fname):
     
 
 def main():
+    
+    outputSummaryFile = "outputSignal.txt"
+    outputCoefsFile = "outputCoefficient.txt"
+    numCores = 8
+    enhancerProximity = 1e+05
+    
+    
     print "Starting Pipeline"
     print
     print "Extracting gene regions"
     
-    if len(sys.argv) != 2:
-        print "Usage: python pipeline_top.py bigwigFeaturesFile"
+    if len(sys.argv) > 3:
+        print "Usage: python pipeline_top.py bigwigFeaturesFile [numCores]"
         sys.exit(1)
+    
+    if len(sys.argv) == 3:
+        numCores = int(sys.argv[-1])
+        
 
     refgene_fname = "refGene.txt"
     output_fname = "regions.tab"
@@ -77,6 +90,9 @@ def main():
     fout.close()
     print "Done extracting regions"    
     
+    
+    
+    ################################################
     print "Feature Extraction"
     feature_param_fname = sys.argv[1]
     isFeaturesValid,errorMsgs,feature_warnings = validateFeatureParamFiles(feature_param_fname)
@@ -91,12 +107,16 @@ def main():
             print val
         print
         sys.exit(1)
+    
+    
+    enhancerRangeFile = "sandelin_enh_expanded.bed"    
         
-        
-    enhancerRangeFile = "sandelin_enh_expanded.bed"
+    
+    
     #args = []
     #featurizeModel.r geneRangeFile enhancerRangeFile inputBigWigFile
-    args = ["Rscript","featurizeModel3.r",output_fname,enhancerRangeFile,feature_param_fname]
+    args = ["Rscript","featurizeModel3.r",output_fname,enhancerRangeFile,feature_param_fname,
+            outputSummaryFile,outputCoefsFile,str(numCores),str(enhancerProximity),enhancerRangeFile]
     print " ".join(args)
 
     proc = subprocess.Popen(args)
