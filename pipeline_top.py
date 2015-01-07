@@ -98,7 +98,9 @@ def main():
 
     proc = subprocess.Popen(args,stdout=subprocess.PIPE)
     out = proc.communicate()[0]
+    print "-----stdout----"
     print out
+    print "-----end stdout-----"
 
     print "training model"
 
