@@ -99,7 +99,7 @@ print("Reading inputs...")
 rangeFileTmpOut = paste0(basename(rangeGeneFile), ".uniq.bed")
 
 ## process gene ranges
-inputList = read.tsv(inputListFile, header=F)
+inputList = read.tsv(inputListFile, header=T)
 colnames(inputList) = c("Patient", "DataType", "DataFile", "Aggregation")
 rangesGene = read.tsv(rangeGeneFile, header=F)
 colnames(rangesGene) = c("id","gene","region","chr","start","end")
@@ -134,8 +134,6 @@ geneData2 = geneData2[ ! (geneData2$variable == "RNA" & geneData2$region != "bod
 
 write.tsv(geneData2, outputSummaryFile)
 
-
-return (cbind(unique(geneData$gene), rep.int(0, ncol(covari)+1)))
 
 ############------ Modeling Start ------############
 modelRNA <- function(i, geneDataList){
