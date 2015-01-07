@@ -268,5 +268,5 @@ results = parallel::mclapply(1:length(geneNames), function(xx){
         print(e)
         print(xx)
     })
-}, mc.cores=10)
+}, mc.cores=numCores)
 
