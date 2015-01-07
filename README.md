@@ -1,6 +1,6 @@
 # Creating Testable and Integrative Epigenetic models of Transcription
 
-### Prerequites:
+### Background:
 "There is an abundance of epigenetic data encompassing a wide variety of markers over many different cell types.
 This surfeit of information empowers labs to infer how these different markers contribute to gene expression and 
 chromatin state. However, there is currently no existing methodology to elucidate relationships between epigenetic 
@@ -13,7 +13,7 @@ the chromatin based on their own epigenetic data. The pipeline uses a combinatio
 based tools." 
 
 
-Prerequites:
+### Prerequites:
 R version >3.0 (Packages: data.table, plyr, reshape2, glmnet, preprocessCore, GenomicRanges) 
 Python version >2.7 but not 3.0 
 
@@ -21,6 +21,8 @@ Python version >2.7 but not 3.0
 2+ sets (patient/replicates) of bigWig files. Inputs are given in an input text file of format (including a header, **tab separated**):
 
 [patient/cell name] [assay type] [absolute file location]  [aggregation function]
+
+Each patient **MUST** have a row with DataType of "RNA". There should be at least one more row for each patient (with common DataType across all the patients).
 
 ### Example:
 Patient	| DataType | DataFile	| Aggregation
@@ -38,10 +40,10 @@ Patient1 | RRBS	| /data/patient1.RRBS.bigWig | mean
 Patient2 | RRBS	| /data/patient2.RRBS.bigWig | mean
 Patient3 | RRBS	| /data/patient3.RRBS.bigWig | mean
 
-Aggregation values: mean, mean0, sum, max, min
+Aggregation values: mean, mean0, sum, max, min. "mean" averages over regions with coverage whereas "mean0" will take zeroes into account as well.
 
 
-Each patient MUST have a row with DataType of "RNA". There should be at least one more row for each patient (with common DataType across all the patients).
+
 
 
 **Current call:**
