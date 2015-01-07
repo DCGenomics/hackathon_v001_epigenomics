@@ -94,10 +94,11 @@ def main():
     #args = []
     #featurizeModel.r geneRangeFile enhancerRangeFile inputBigWigFile
     args = ["Rscript","featurizeModel2.r",output_fname,enhancerRangeFile,feature_param_fname]
-    print "\t".join(args)
+    print " ".join(args)
 
-    #proc = subprocess.Popen(args,stdout=subprocess.PIPE)
-    #out = proc.communicate()[0]
+    proc = subprocess.Popen(args,stdout=subprocess.PIPE)
+    out = proc.communicate()[0]
+    print out
 
     print "training model"
 
