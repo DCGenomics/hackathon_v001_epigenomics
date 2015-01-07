@@ -1,5 +1,17 @@
 Creating Testable and Integrative Epigenetic models of Transcription
 
+"There is an abundance of epigenetic data encompassing a wide variety of markers over many different cell types.
+This surfeit of information empowers labs to infer how these different markers contribute to gene expression and 
+chromatin state. However, there is currently no existing methodology to elucidate relationships between epigenetic 
+modifiers.  We sought to rectify this by developing an analytic pipeline that efficiently  allows labs to form 
+models of relationships between RNA-seq data, ChIP-seq data, and DNA methylation data from their own cell lines. 
+These models can then be used to predict changes in gene expression with respect to changes in these epigenetic 
+signals. This pipeline is also flexible in the sense that labs need not provide all three types of sequence reads. 
+Publicly available datasets can be utilized to generate a model, which a lab can then use to predict the state of 
+the chromatin based on their own epigenetic data. The pipeline uses a combination of python, R, and command line 
+based tools." 
+
+
 Prerequites:
 R version >3.0 (Packages: data.table, plyr, reshape2, glmnet, preprocessCore, GenomicRanges) 
 Python version >2.7 but not 3.0 
