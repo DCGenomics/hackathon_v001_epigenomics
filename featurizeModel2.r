@@ -200,7 +200,7 @@ aqn <- function(dF)
 better.scale <- function(mat)
 {
     nmat <- apply(mat, 2, function(xx){
-        if (all(xx == unique(xx))){ return(xx) }
+        if (length(unique(xx) == 1)){ return(xx) }
         else{ return(scale(xx)) } })
     return(nmat)
 }
