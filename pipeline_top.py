@@ -34,7 +34,7 @@ def validateFeatureParamFiles(fname):
         
         if not os.path.isfile(bw_fname):
             errors.append("%s does not exist"%(bw_fname))            
-        elif not bw_fname[:-2] == "bw":
+        elif bw_fname[:-2] != "bw":
             errors.append("%s does not appear to be a bigwig file"%(bw_fname))
     
     
@@ -85,8 +85,9 @@ def main():
             print warn
     
     if not isFeaturesValid:
+        print "Errors found"
         for val in errorMsgs:
-            print errorMsgs
+            print val
         print
         sys.exit(1)
         
