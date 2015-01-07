@@ -1,9 +1,25 @@
 Creating Testable and Integrative Epigenetic models of Transcription
 
-Requirements:
-Python >=2.4 & <3.0
-R >= 3.0.2 (Packages: data.table, plyr, reshape2, glmnet, preprocessCore, GenomicRanges)
+Prerequites:
+R version >3.0 (Packages: data.table, plyr, reshape2, glmnet, preprocessCore, GenomicRanges) 
+Python version >2.7 but not 3.0 
 
-Usage:
+Current call:
+python pipeline_top.py bigwigFeaturesFile
+	hardcoded inputs:
+			refgene_fname = "refGene.txt"
+		  enhancerRangeFile = "sandelin_enh_expanded.bed"
 
-Input Files:
+# File input list format (tab-separated/tsv):
+[patient/cell name] [assay type] [absolute file location]  [aggregation function]
+
+
+
+# Model Output format:
+	# Index	[ integer ]
+	# Gene_name	[ string ]
+	# Feature_chr [ chr# or chr ##]
+	# Feature_start [ integer ]
+	# Feature_end  [ integer ] 
+	# Feature_pos_relative_to_gene  [ up,down,body ]
+	# Feature_score [ float ]
