@@ -1,0 +1,9 @@
+Creating Testable and Integrative Epigenetic models of Transcription
+
+Requirements:
+Python >=2.4 & <3.0
+R >= 3.0.2 (Packages: data.table, plyr, reshape2, glmnet, preprocessCore, GenomicRanges)
+
+Usage:
+
+Input Files:
