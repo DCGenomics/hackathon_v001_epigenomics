@@ -32,10 +32,10 @@ def validateFeatureParamFiles(fname):
         
         bw_fname = items[2]
         
-        if not os.path.isfile(bw_file):
-            errors.append("%s does not exist"%(bw_file))            
+        if not os.path.isfile(bw_fname):
+            errors.append("%s does not exist"%(bw_fname))            
         elif not bw_fname[:-2] == "bw":
-            errors.append("%s does not appear to be a bigwig file"%(bw_file))
+            errors.append("%s does not appear to be a bigwig file"%(bw_fname))
     
     
     for p in patient_map:
