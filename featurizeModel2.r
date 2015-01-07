@@ -166,9 +166,7 @@ modelRNA <- function(i, geneDataList){
     residual <- rna - s1.fit
     step2 <- cv.glmnet(enh, residual, standardize=TRUE, intercept=FALSE)
     s2.c <- predict(step2, type="coefficients", s="lambda.1se")
-
-    coefs <- c(unique(geneData$gene), unlist(s1.c[,1]), unlist(s2.c[-1,1]))
-	#coefs = data.frame(gene=unique(geneData$gene), variable=rownames(s1.c), coefficient=s1.c[,1], row.names=NULL)
+    coefs = data.frame(gene=unique(geneData$gene), variable=c(rownames(s1.c), rownames(s2.c)[-1]), coefficient=c(s1.c[,1],s2.c[-1,1]), row.names=NULL)
     return(coefs)
 }
 
