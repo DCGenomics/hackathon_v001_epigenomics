@@ -7,12 +7,19 @@ import subprocess
 
 def validateFeatureParamFiles(fname):
     f = open(fname)
+    #header
+    f.readline()
+    errors = []
     for line in f:
         line = line.strip()
         items = line.split("\t")
         print items
+        if not os.path.isfile(items[2]):
+            errors.append("%s does not exist"%(items[2]))
+
+        print items
     print fname
-    return False,""
+    return len(errors) == 0,errors
     
 
 def main():
