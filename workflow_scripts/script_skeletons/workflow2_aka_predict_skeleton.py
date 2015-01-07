@@ -1,23 +1,20 @@
 #! /bin/bash
 # Expecting to get called as:
-#	annotate user bigwig model_output
+#	predict user_input_list.txt  model_output gene_model.bed.txt
 
-number_of_returned_peaks
-or:
-peak_threshold
 
-for peak in user_input:
-	#assign value/metric to peak
-	#peak_score=
-	# return peak_index, peak_data, peak_score
-	raw_output[i]=peak_index, peak_data, peak_score
 
-output=sort( raw_output)
 
-if peak_threshold is none:
-	re
+# Read in model_output, create model object(s)
 
-else:
-	output [ output$peak_score <peak_threshold,  ]  
-	return 
+for each patient in user_input:
+	#read in user data
+	for each gene in gene_list:
+		#predict transcription
+		line=(patient, gene, prediction)
+		output.write(line)
+
+
+
+
 
