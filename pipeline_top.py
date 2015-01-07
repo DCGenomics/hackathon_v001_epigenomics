@@ -59,6 +59,10 @@ def main():
     print "Starting Pipeline"
     print
     print "Extracting gene regions"
+    
+    if len(argv) != 2:
+        print "Usage: python pipeline_top.py bigwigFeaturesFile"
+        sys.exit(1)
 
     refgene_fname = "refGene.txt"
     output_fname = "regions.tab"
@@ -74,7 +78,7 @@ def main():
     print "Done extracting regions"    
     
     print "Feature Extraction"
-    feature_param_fname = "/home/cemmeydan/inputTest3.txt"
+    feature_param_fname = sys.argv[1]
     isFeaturesValid,errorMsgs,feature_warnings = validateFeatureParamFiles(feature_param_fname)
     
     if len(feature_warnings) > 0:
@@ -89,7 +93,7 @@ def main():
         sys.exit(1)
         
         
-    enhancerRangeFile = "/epigenomes/teamdata/sandelin_enh_expanded.bed"
+    enhancerRangeFile = "sandelin_enh_expanded.bed"
     #args = []
     #featurizeModel.r geneRangeFile enhancerRangeFile inputBigWigFile
     args = ["Rscript","featurizeModel3.r",output_fname,enhancerRangeFile,feature_param_fname]
