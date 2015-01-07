@@ -16,7 +16,7 @@
 #  Install R-3, requires CRAN mirror, not mainline Ubuntu
 #  
 ####  echo deb http://watson.nci.nih.gov/cran_mirror/bin/linux/ubuntu precise/ | sudo tee /etc/apt/sources.list.d/R.list
-####  gpg -a --export E084DAB9 | sudo apt-key add - && sudo apt-get update && sudo apt-get install r-core r-base
+####  gpg -a --export E084DAB9 | sudo apt-key add - && sudo apt-get update && sudo apt-get -y install r-core r-base
 #
 #
 #  Packages that were installed during development:
@@ -40,7 +40,7 @@
 ####  sudo apt-get install -y libgsl0ldbl libgsl0-dev
 #
 #  Undeclared dependency to install biomaRt
-####  sudo apt-get install libcurl4-nss-dev
+####  sudo apt-get install -y libcurl4-nss-dev
 #
 #  Install bioinformatics software into /usr/local/[package]-[version]; symlink to /usr/local/[package]
 #
@@ -83,7 +83,7 @@
 # curl http://archive.cloudera.com/cdh5/ubuntu/precise/amd64//cdh/archive.key | sudo apt-key add -
 # sudo curl -o /etc/apt/sources.list.d/cloudera.list http://archive.cloudera.com/cdh5/ubuntu/precise/amd64//cdh//cloudera.list
 # sudo apt-get update
-# sudo apt-get install spark-core spark-master spark-worker spark-history-server spark-python
+# sudo apt-get install -y spark-core spark-master spark-worker spark-history-server spark-python
 # #     NB: spark-history-server fails to start because the HDFS setup is incomplete. For a standalone simple server, this is fine
 # #     Start spark with python or the scala shell
 # #     pyspark
