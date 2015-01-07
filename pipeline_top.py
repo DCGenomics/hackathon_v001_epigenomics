@@ -95,11 +95,9 @@ def main():
     args = ["Rscript","featurizeModel2.r",output_fname,enhancerRangeFile,feature_param_fname]
     print " ".join(args)
 
-    proc = subprocess.Popen(args,stdout=subprocess.PIPE)
-    out = proc.communicate()[0]
-    print "-----stdout----"
-    print out
-    print "-----end stdout-----"
+    proc = subprocess.Popen(args)
+    proc.communicate()
+
 
     print "training model"
 
