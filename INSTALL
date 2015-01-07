@@ -5,41 +5,45 @@
 # # will remove those comments and make this runnable script
 # # The Bioinformatics tool installs to /usr/local/ are *not* scripted.
 #
-#  Start with Ubuntu 12.04 “precise” AMI.
+# # Start with Ubuntu 12.04 “precise” AMI.
 #
-#  Create 1TB EBS volume, typically found as /dev/xvdf, attach to instance and mount as /epigenomics/
-#### sudo mkdir -p /epigenomics && sudo mount /dev/xvdf /epigenomics
+# # Create EBS volumes if needed
 #
-#  # Standard developer tools
+# # Standard developer tools
 ####  sudo apt-get update 
 ####  sudo apt-get upgrade -y
 ####  sudo apt-get install -y build-essential python perl openjdk-7-jre emacs vim
 #
-#  Install R-3, requires CRAN mirror, not mainline Ubuntu
+#
+# #  Install R-3, requires CRAN mirror, not mainline Ubuntu
 #  
 ####  echo deb http://watson.nci.nih.gov/cran_mirror/bin/linux/ubuntu precise/ | sudo tee /etc/apt/sources.list.d/R.list
 ####  sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E084DAB9
 ####  sudo apt-get update && sudo apt-get -y install r-core r-base-core
 #
 #
-#  Packages that were installed during development:
+#  Potential R packages that were installed during development:
 #  AnnotationDbi/  BiocInstaller/  colorspace/  dplyr/          gtable/    locfit/       munsell/         RColorBrewer/  RSQLite/    stringr/
 #  assertthat/     biomaRt/        data.table/  GenomeInfoDb/   IRanges/   magrittr/     plyr/            Rcpp/          rstudio/    XML/
 #  BH/             bitops/         DBI/         GenomicRanges/  labeling/  manipulate/   preprocessCore/  RCurl/         S4Vectors/  XVector/
 #  Biobase/        bsseq/          dichromat/   ggplot2/        lars/      matrixcalc/   proto/           reshape2/      scales/
 #  BiocGenerics/   chron/          digest/      glmnet/         lazyeval/  matrixStats/  R6/              R.methodsS3/   sem/
 #
-## Packages required based on current code
-## To grab a list of required R libraries
-#  find . -name "*.[rR]" -exec grep -P '^\s*library' {} \; | sort | uniq | perl -ple 's/^.*\((.*?)\)/$1/'
-# # Set R CRAN default
-echo 'local({ r <- getOption("repos") ; r["CRAN"] <- "http://watson.nci.nih.gov/cran_mirror/" ; options(repos = r);})' | sudo tee /etc/R/Rprofile.site
+# # Packages required based on current code
+#
+# # To grab a list of required R libraries
+# # find . -name "*.[rR]" -exec grep -P '^\s*library' {} \; | sort | uniq | perl -ple 's/^.*\((.*?)\)/$1/'
+#
+# # Set R CRAN default globally for non-iteractive installs
+#
+####echo 'local({ r <- getOption("repos") ; r["CRAN"] <- "http://watson.nci.nih.gov/cran_mirror/" ; options(repos = r);})' | sudo tee /etc/R/Rprofile.site
 ## Do standard R packages
 ####  for i in data.table glmnet lars plyr reshape2 ; do sudo R -e "install.packages('$i')" ; done
+#
 ## Do BioConductor packages
 ####  for i in bsseq GenomicRanges preprocessCore ; do sudo R -e "source('http://bioconductor.org/biocLite.R') ; biocLite('$i')" ; done
 #
-#  # Additional packages
+# # Additional packages
 #
 #  Undeclared dependency for one (MACS?) of the bioinformatics tools
 ####  sudo apt-get install -y libgsl0ldbl libgsl0-dev
@@ -71,13 +75,13 @@ echo 'local({ r <- getOption("repos") ; r["CRAN"] <- "http://watson.nci.nih.gov/
 #  https://github.com/Ensembl/WiggleTools/releases/download/v1.0/wiggletools_x86_64_linux
 #
 #  # Create /etc/profile.d/Z98biotools.sh to include those directories in PATH
-#cat /etc/profile.d/Z98biotools.sh <<END
+#cat -> /etc/profile.d/Z98biotools.sh <<END
 # #!/bin/sh
 # for i in wiggletools bedtools2 ucsc_tools MACS/bin/ samtools/usr/local/bin bowtie2 bismark STAR/bin/Linux_x86_64 
 #    do export PATH="/usr/local/$i:$PATH" 
 # done
 #END
-# sudo chmod a+x /etc/profile.d/Z98biotools
+# # sudo chmod a+x /etc/profile.d/Z98biotools
 #
 #   #   Set umask to 002 to help group collaboration - in English, this means that by default files are created as user read/write/execute, group read/write/execute, other read/execute; or mode 775.
 #   #   /etc/login.defs; UMASK 002
@@ -85,7 +89,7 @@ echo 'local({ r <- getOption("repos") ; r["CRAN"] <- "http://watson.nci.nih.gov/
 # sed -i -e 's/^UMASK 022/UMASK 002/g' /etc/login.defs
 #
 #   #  _IF_ we’re using Spark
-# curl http://archive.cloudera.com/cdh5/ubuntu/precise/amd64//cdh/archive.key | sudo apt-key add -
+# curl http://archive.cloudera.com/cdh5/ubuntu/precise/amd64/cdh/archive.key | sudo apt-key add -
 # sudo curl -o /etc/apt/sources.list.d/cloudera.list http://archive.cloudera.com/cdh5/ubuntu/precise/amd64//cdh//cloudera.list
 # sudo apt-get update
 # sudo apt-get install -y spark-core spark-master spark-worker spark-history-server spark-python
