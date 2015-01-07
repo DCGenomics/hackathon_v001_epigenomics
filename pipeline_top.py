@@ -44,7 +44,9 @@ def validateFeatureParamFiles(fname):
         print pkeys
         for val in pkeys:
             print val
+            print val == "RNA"
             if val == "RNA":
+                print "gets here"
                 hasRna == True
             
         if not hasRna:
