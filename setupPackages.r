@@ -1,0 +1,7 @@
+install.packages("data.table")
+install.packages("plyr")
+install.packages("reshape2")
+install.packages("glmnet")
+source("http://bioconductor.org/biocLite.R")
+biocLite("GenomicRanges")
+biocLite("preprocessCore")
