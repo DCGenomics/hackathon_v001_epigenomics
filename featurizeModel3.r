@@ -18,21 +18,12 @@ if(length(args) >= 5) outputCoefsFile = args[5]
 if(length(args) >= 6) numCores = as.integer(args[6])
 if(length(args) >= 7) enhancerProximity = as.integer(args[7])
 
-
-if("data.table" %in% rownames(installed.packages()) == FALSE) install.packages("data.table")
-if("plyr" %in% rownames(installed.packages()) == FALSE) install.packages("plyr")
-if("reshape2" %in% rownames(installed.packages()) == FALSE) install.packages("reshape2")
-if("glmnet" %in% rownames(installed.packages()) == FALSE) install.packages("glmnet")
-if("GenomicRanges" %in% rownames(installed.packages()) == FALSE) { source("http://bioconductor.org/biocLite.R"); biocLite("GenomicRanges"); }
-if("preprocessCore" %in% rownames(installed.packages()) == FALSE) { source("http://bioconductor.org/biocLite.R"); biocLite("preprocessCore"); }
-
-
-suppressMessages(require(data.table)    )
-suppressMessages(require(plyr)          )
-suppressMessages(require(reshape2)      )
-suppressMessages(require(glmnet)        )
-suppressMessages(require(preprocessCore))
-suppressMessages(require(GenomicRanges) )
+suppressMessages(library(data.table)    )
+suppressMessages(library(plyr)          )
+suppressMessages(library(reshape2)      )
+suppressMessages(library(glmnet)        )
+suppressMessages(library(preprocessCore))
+suppressMessages(library(GenomicRanges) )
 
 
 
@@ -198,10 +189,9 @@ modelRNA.bak <- function(i, geneNames, geneDataAll)
 
 modelRNA <- function(i, geneNames, geneDataAll)
 {
-	geneName = geneNames[i]
-	geneData = geneDataAll[geneDataAll$gene == geneName, ]
+    geneName = geneNames[i]
+    geneData = geneDataAll[geneDataAll$gene == geneName, ]
     #geneData = geneDataList[[i]]
-
 
     rnaData = geneData[ geneData$variable=="RNA", c("gene","patient","value")]
     colnames(rnaData)[3] = "RNA"
@@ -225,7 +215,6 @@ modelRNA <- function(i, geneNames, geneDataAll)
         s1.c <- predict(step1, type="coefficients", s="lambda.1se")
         rnames.s.c <- rownames(s1.c)
         c.s.c <- s1.c[,1]
-        s1.fit <- predict(step1, newx=covari, s="lambda.1se")
         coefs = data.frame(gene=unique(geneData$gene), variable=rnames.s.c, coefficient=c.s.c, row.names=NULL)
         return(coefs)
     }, error=function(e){
@@ -272,7 +261,7 @@ print("Done!")
 
 #res = rbindlist(parallel::mclapply(1:100, modelRNA, geneDataList, mc.cores=numCores))
 
-results = parallel::mclapply(1:length(geneDataList), function(xx){
+results = parallel::mclapply(1:length(geneNames), function(xx){
     tryCatch({
       modelRNA(xx, geneNames, geneData2)
     }, error=function(e){
