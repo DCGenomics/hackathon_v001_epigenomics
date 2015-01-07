@@ -168,6 +168,7 @@ modelRNA <- function(i, geneDataList){
     s2.c <- predict(step2, type="coefficients", s="lambda.1se")
 
     coefs <- c(unique(geneData$gene), unlist(s1.c[,1]), unlist(s2.c[-1,1]))
+	#coefs = data.frame(gene=unique(geneData$gene), variable=rownames(s1.c), coefficient=s1.c[,1], row.names=NULL)
     return(coefs)
 }
 
