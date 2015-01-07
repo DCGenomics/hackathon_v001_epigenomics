@@ -60,7 +60,7 @@ def main():
     print
     print "Extracting gene regions"
     
-    if len(argv) != 2:
+    if len(sys.argv) != 2:
         print "Usage: python pipeline_top.py bigwigFeaturesFile"
         sys.exit(1)
 
