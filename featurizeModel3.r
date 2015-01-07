@@ -256,7 +256,7 @@ results = parallel::mclapply(1:length(geneNames), modelRNA, geneNames, geneData2
 
 results2 = rbindlist(results)
 write.tsv(results2, outputCoefsFile)
-results3 = results2[results2$variable != "(Intercept)" & results2$coefficient = 0, ]
+results3 = results2[results2$variable != "(Intercept)" & results2$coefficient != 0, ]
 write.tsv(results3, paste0(outputCoefsFile, ".filtered"))
 
 print("Done!")
