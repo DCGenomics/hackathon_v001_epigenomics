@@ -1,14 +1,14 @@
-Creating Testable and Integrative Epigenetic models of Transcription
+# Creating Testable and Integrative Epigenetic models of Transcription
 
-Prerequites:
+### Prerequites:
 R version >3.0 (Packages: data.table, plyr, reshape2, glmnet, preprocessCore, GenomicRanges) 
 Python version >2.7 but not 3.0 
 
-Inputs:
+### Inputs:
 2+ sets (patient/replicates) of bigWig files. Inputs are given in an input text of format (including a header):
 [patient/cell name] [assay type] [absolute file location]  [aggregation function]
 
-Example:
+### Example:
 Patient	DataType	DataFile	Aggregation
 Patient1	RNA	/epigenomes/teamdata/h1_data/GSM484nnn/GSM484408/suppl/GSM484408_UCSF-UBC.H1.mRNA-Seq.H1EScd1_batch2_vial2.wig.gz.bw	mean
 Patient2	RNA	/epigenomes/teamdata/h1_data/GSM915nnn/GSM915328/suppl/GSM915328_UCSD.H1.mRNA-Seq.polyA-RNA-seq_h1_r1a.wig.gz.bw	mean
@@ -23,22 +23,19 @@ Patient1	RRBS	/epigenomes/teamdata/h1_data/GSM621nnn/GSM621357/suppl/GSM621357_B
 Patient2	RRBS	/epigenomes/teamdata/h1_data/GSM621nnn/GSM621705/suppl/GSM621705_BI.H1.RRBS.RRBS776-779.wig.gz.bw	mean
 Patient3	RRBS	/epigenomes/teamdata/h1_data/GSM621nnn/GSM621763/suppl/GSM621763_BI.H1.RRBS.RRBS534-535.wig.gz.bw	mean
 
+Aggregation values: mean, mean0, sum, max, min
+
 
 Each patient MUST have a row with DataType of "RNA". There should be at least one more row for each patient (with common DataType across all the patients).
 
 
-Each replicate MUST have an RNA
-
-Current call:
+**Current call:**
+```
 python pipeline_top.py bigwigFeaturesFile
+```
 	hardcoded inputs:
-			refgene_fname = "refGene.txt"
-		  enhancerRangeFile = "sandelin_enh_expanded.bed"
-
-# File input list format (tab-separated/tsv):
-[patient/cell name] [assay type] [absolute file location]  [aggregation function]
-
-
+		refgene_fname = "refGene.txt"
+	    enhancerRangeFile = "sandelin_enh_expanded.bed"
 
 # Model Output format:
 	# Index	[ integer ]
