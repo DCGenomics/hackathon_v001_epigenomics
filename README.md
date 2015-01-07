@@ -24,18 +24,18 @@ Python version >2.7 but not 3.0
 ### Example:
 Patient	| DataType | DataFile	| Aggregation
 --------|----------|------------|------------
-Patient1 | RNA | /epigenomes/teamdata/h1_data/GSM484nnn/GSM484408/suppl/GSM484408_UCSF-UBC.H1.mRNA-Seq.H1EScd1_batch2_vial2.wig.gz.bw | mean
-Patient2 | RNA | /epigenomes/teamdata/h1_data/GSM915nnn/GSM915328/suppl/GSM915328_UCSD.H1.mRNA-Seq.polyA-RNA-seq_h1_r1a.wig.gz.bw | mean
-Patient3 | RNA | /epigenomes/teamdata/h1_data/GSM484nnn/GSM484408/suppl/GSM484408_UCSF-UBC.H1.mRNA-Seq.H1EScd1_batch2_vial2.wig.gz.bw | mean
-Patient1 | H3K4me1	| /epigenomes/teamdata/h1_data/GSM409nnn/GSM409307/suppl/GSM409307_UCSD.H1.H3K4me1.LL228.wig.gz.bw | sum
-Patient2 | H3K4me1	| /epigenomes/teamdata/h1_data/GSM433nnn/GSM433177/suppl/GSM433177_BI.H1.H3K4me1.Solexa-10529.wig.gz.bw | sum
-Patient3 | H3K4me1	| /epigenomes/teamdata/h1_data/GSM434nnn/GSM434762/suppl/GSM434762_UCSF-UBC.H1.H3K4me1.H1EScd1-me1K4-D.wig.gz.bw | sum
-Patient1 | H3K4me3	| /epigenomes/teamdata/h1_data/GSM409nnn/GSM409308/suppl/GSM409308_UCSD.H1.H3K4me3.LL227.wig.gz.bw | sum
-Patient2 | H3K4me3	| /epigenomes/teamdata/h1_data/GSM410nnn/GSM410808/suppl/GSM410808_UCSF-UBC.H1.H3K4me3.H1EScd1-me3K4-A.wig.gz.bw | sum
-Patient3 | H3K4me3	| /epigenomes/teamdata/h1_data/GSM432nnn/GSM432392/suppl/GSM432392_UCSF-UBC.H1.H3K4me3.H1EScd2-me3K4-C.wig.gz.bw | sum
-Patient1 | RRBS	| /epigenomes/teamdata/h1_data/GSM621nnn/GSM621357/suppl/GSM621357_BI.H1.RRBS.RRBS360-361.wig.gz.bw | mean
-Patient2 | RRBS	| /epigenomes/teamdata/h1_data/GSM621nnn/GSM621705/suppl/GSM621705_BI.H1.RRBS.RRBS776-779.wig.gz.bw | mean
-Patient3 | RRBS	| /epigenomes/teamdata/h1_data/GSM621nnn/GSM621763/suppl/GSM621763_BI.H1.RRBS.RRBS534-535.wig.gz.bw | mean
+Patient1 | RNA | /data/patient1.RNA.bigWig | mean
+Patient2 | RNA | /data/patient2.RNA.bigWig | mean
+Patient3 | RNA | /data/patient3.RNA.bigWig | mean
+Patient1 | H3K4me1	| /data/patient1.H3K4me1.bigWig | sum
+Patient2 | H3K4me1	| /data/patient2.H3K4me1.bigWig | sum
+Patient3 | H3K4me1	| /data/patient3.H3K4me1.bigWig | sum
+Patient1 | H3K4me3	| /data/patient1.H3K4me3.bigWig | sum
+Patient2 | H3K4me3	| /data/patient2.H3K4me3.bigWig | sum
+Patient3 | H3K4me3	| /data/patient3.H3K4me3.bigWig | sum
+Patient1 | RRBS	| /data/patient1.RRBS.bigWig | mean
+Patient2 | RRBS	| /data/patient2.RRBS.bigWig | mean
+Patient3 | RRBS	| /data/patient3.RRBS.bigWig | mean
 
 Aggregation values: mean, mean0, sum, max, min
 
