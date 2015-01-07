@@ -41,16 +41,13 @@ def validateFeatureParamFiles(fname):
     for p in patient_map:
         hasRna = False
         pkeys = patient_map[p]
-        print pkeys
         for val in pkeys:
-            if val in required and val == "RNA":
-                print "gets here"
+            if val == "RNA":
                 hasRna = True
             
         if not hasRna:
             errors.append("data set %s has no RNA"%(p))
-        
-        
+
         if len(pkeys) == 2 and hasRna:
             feature_warnings.append("warning: data set %s has only two features, three or more recomended."%(p))
 
