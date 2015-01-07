@@ -37,7 +37,6 @@ def validateFeatureParamFiles(fname):
         elif bw_fname[-2:] != "bw":
             errors.append("%s does not appear to be a bigwig file"%(bw_fname))
     
-    
     for p in patient_map:
         hasRna = False
         pkeys = patient_map[p]
