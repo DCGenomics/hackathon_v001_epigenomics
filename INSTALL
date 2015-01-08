@@ -3,7 +3,6 @@
 # # Commands "ready to run" in a shell are prefixed with ####
 # # sed -i -e 's/^####//g' INSTALL ; sh INSTALL
 # # will remove those comments and make this runnable script
-# # The Bioinformatics tool installs to /usr/local/ are *not* scripted.
 #
 # # Start with Ubuntu 12.04 “precise” AMI.
 #
